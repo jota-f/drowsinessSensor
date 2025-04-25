@@ -119,7 +119,7 @@ Este projeto usa um modelo personalizado treinado para detecção de sonolência
    - Baixe e extraia no diretório raiz do projeto
    - Renomeie a pasta para "snorless-1_inferencing"
 
-### Características
+### Características 
 - Detecção de sonolência em tempo real usando visão computacional
 - Sistema de alerta progressivo com feedback visual e sonoro
 - Ajuste automático de luz para diferentes ambientes
@@ -185,7 +185,7 @@ git clone https://github.com/yourusername/drowsiness-sensor.git
    - Nível 4: Alerta crítico com padrão SOS
 
 ### Solução de Problemas
-- Se a câmera falhar ao inicializar, verifique a alimentação
 - Garanta condições adequadas de iluminação
+- Se a câmera falhar ao inicializar, verifique a alimentação
 - Verifique o monitor serial para informações de debug
 - Verifique se todas as conexões estão seguras 
