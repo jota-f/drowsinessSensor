@@ -10,17 +10,6 @@
 *.o
 *.d
 *.a
-*.hex
-*.elf
-*.bin
-*.eep
-*.lss
-*.map
-*.sym
-*.lst
-*.o
-*.d
-*.a
 
 # IDE specific files
 .vscode/
@@ -28,20 +17,43 @@
 *.swp
 *.swo
 *~
+.pioenvs/
+.clang_complete
+.gcc-flags.json
 
 # Build output
 build/
 Debug/
 Release/
+.piolibdeps/
 
 # Dependencies
 .pio/
 .vs/
-.vscode/
 
 # Exclude the Edge Impulse model folder
-snorless-1_inferencing/
+drowsinessSensor-1_inferencing/
 
 # System files
 .DS_Store
-Thumbs.db 
+Thumbs.db
+
+# Logs e arquivos temporários
+*.log
+*.tmp
+*.temp
+
+# Arquivos de configuração pessoal
+arduino_secrets.h
+config.h
+secrets.h
+
+# Arquivos do Arduino IDE
+.directory
+**/build/
+
+# Pasta da Cursor IDE
+.cursor/ 
+
+#arqquivos de melhoria
+.melhoria.txt

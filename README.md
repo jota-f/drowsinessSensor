@@ -1,191 +1,63 @@
-# Drowsiness Sensor / Sensor de Sonolência
+# drowsinessSensor - Sistema de Detecção de Sonolência para Motoristas
 
 [English](#english) | [Português](#português)
 
-## English
-
-### Overview
-Drowsiness Sensor is an ESP32-CAM based system that uses Edge Impulse machine learning to detect driver drowsiness through visual cues like nodding and yawning. The system provides progressive alerts through LED and buzzer to warn the driver.
-
-### Features
-- Real-time drowsiness detection using computer vision
-- Progressive alert system with visual and audio feedback
-- Automatic light adjustment for different environments
-- Adaptive detection thresholds
-- Debug mode for troubleshooting
-- Memory optimization for ESP32-CAM
-
-### Hardware Requirements
-- ESP32-CAM AI-Thinker
-- Buzzer (connected to GPIO12)
-- Power supply (5V recommended)
-- Optional: External LED for better visibility
-
-### Technical Details
-#### Image Processing Pipeline
-1. Image Capture:
-   - Resolution: QVGA (320x240)
-   - Format: JPEG (for efficient storage)
-2. Image Conversion:
-   - Converted to RGB888 (3 channels, 8 bits per channel)
-   - Resized to 96x96 pixels
-3. Model Input:
-   - Dimensions: 96x96 pixels
-   - Format: RGB888
-   - Channels: 3 (Red, Green, Blue)
-   - Bits per channel: 8
-
-### Edge Impulse Model
-This project uses a custom trained model for drowsiness detection. To use the model:
-
-1. Create an Edge Impulse account at [edgeimpulse.com](https://www.edgeimpulse.com)
-2. Create a new project
-3. Configure the input parameters:
-   - Input size: 96x96 pixels
-   - Color depth: RGB888 (3 channels, 8 bits per channel)
-   - Processing: Raw RGB values
-4. Train the model with three classes:
-   - "awake": Normal driving position
-   - "nodding": Head tilting forward
-   - "yawning": Open mouth yawning
-5. Deploy the model:
-   - Select "Arduino Library" as deployment option
-   - Download and extract to your project's root directory
-   - Rename the folder to "snorless-1_inferencing"
-
-### Installation
-
-1. Install Required Libraries:
-   - ESP32 board support in Arduino IDE
-   - Edge Impulse SDK
-   - ESP32 Camera library
-
-2. Clone this repository:
-```bash
-git clone https://github.com/yourusername/drowsiness-sensor.git
-```
-
-3. Open the project in Arduino IDE
-
-4. Install the Edge Impulse model:
-   - Download your trained model from Edge Impulse
-   - Place the model files in the `src` folder
-   - Update the model path in the code if necessary
-
-5. Configure the hardware:
-   - Connect the buzzer to GPIO12
-   - Ensure proper power supply
-   - Position the camera correctly
-
-6. Upload the code to your ESP32-CAM
-
-### Usage
-1. Power on the device
-2. The system will initialize and start monitoring
-3. Position yourself in front of the camera
-4. The system will automatically detect drowsiness signs
-5. Alerts will be triggered progressively:
-   - Level 1: Slow blinking LED and low tone
-   - Level 2: Medium blinking and medium tone
-   - Level 3: Fast blinking and high tone
-   - Level 4: Critical alert with SOS pattern
-
-### Troubleshooting
-- If the camera fails to initialize, check the power supply
-- Ensure proper lighting conditions
-- Check serial monitor for debug information
-- Verify all connections are secure
-
 ## Português
 
+### ⚠️ Aviso Importante
+**DISCLAIMER**: Este é um projeto de estudos em andamento. Não é um produto comercial ou certificado para uso em situações críticas. O uso deste sistema é por sua própria conta e risco. Os desenvolvedores não se responsabilizam por qualquer dano, acidente ou problema decorrente do uso deste sistema.
+
 ### Visão Geral
-O Sensor de Sonolência é um sistema baseado em ESP32-CAM que utiliza aprendizado de máquina do Edge Impulse para detectar sonolência do motorista através de sinais visuais como cabeceios e bocejos. O sistema fornece alertas progressivos através de LED e buzzer para avisar o motorista.
+drowsinessSensor é um sistema de detecção de sonolência projetado para aumentar a segurança no trânsito, alertando motoristas quando sinais de sonolência são detectados. Utilizando um ESP32-CAM e um modelo de inteligência artificial treinado no Edge Impulse, o sistema monitora em tempo real sinais visuais como cabeceio e bocejo, emitindo alertas progressivos para prevenir acidentes.
 
-### Modelo Edge Impulse
-Este projeto usa um modelo personalizado treinado para detecção de sonolência. Para usar o modelo:
-
-1. Crie uma conta no Edge Impulse em [edgeimpulse.com](https://www.edgeimpulse.com)
-2. Crie um novo projeto
-3. Configure os parâmetros de entrada:
-   - Tamanho da entrada: 96x96 pixels
-   - Profundidade de cor: RGB888 (3 canais, 8 bits por canal)
-   - Processamento: Valores RGB brutos
-4. Treine o modelo com três classes:
-   - "awake": Posição normal de direção
-   - "nodding": Cabeça inclinando para frente
-   - "yawning": Bocejo com boca aberta
-5. Faça o deploy do modelo:
-   - Selecione "Arduino Library" como opção de deploy
-   - Baixe e extraia no diretório raiz do projeto
-   - Renomeie a pasta para "snorless-1_inferencing"
-
-### Características 
-- Detecção de sonolência em tempo real usando visão computacional
-- Sistema de alerta progressivo com feedback visual e sonoro
-- Ajuste automático de luz para diferentes ambientes
-- Thresholds de detecção adaptativos
-- Modo debug para solução de problemas
-- Otimização de memória para ESP32-CAM
+### Características
+- **Detecção em Tempo Real**: Monitoramento contínuo do estado de alerta do motorista
+- **Alertas Progressivos**: Sistema de alerta em níveis crescentes de intensidade
+- **Adaptação Automática**: Ajuste a diferentes condições de iluminação
+- **Baixo Consumo**: Otimizado para dispositivos com recursos limitados
+- **Fácil Instalação**: Configuração simples no painel do veículo
 
 ### Requisitos de Hardware
-- ESP32-CAM AI-Thinker
+- ESP32-CAM (modelo AI-Thinker recomendado)
 - Buzzer (conectado ao GPIO12)
-- Fonte de alimentação (5V recomendado)
-- Opcional: LED externo para melhor visibilidade
+- Fonte de alimentação de 5V
+- Cabo USB para programação
+- Opcional: LED externo para melhor visibilidade dos alertas
 
-### Detalhes Técnicos
-#### Pipeline de Processamento de Imagem
-1. Captura de Imagem:
-   - Resolução: QVGA (320x240)
-   - Formato: JPEG (para armazenamento eficiente)
-2. Conversão de Imagem:
-   - Convertida para RGB888 (3 canais, 8 bits por canal)
-   - Redimensionada para 96x96 pixels
-3. Entrada do Modelo:
-   - Dimensões: 96x96 pixels
-   - Formato: RGB888
-   - Canais: 3 (Vermelho, Verde, Azul)
-   - Bits por canal: 8
+### Documentação
+- [Guia de Instalação](INSTALACAO.md)
+- [Guia de Contribuição](CONTRIBUTING.md)
 
-### Instalação
+### Arquivos Importantes
+- `drowsinessSensor.ino`: Código principal do projeto
+- `ei-snorless-1-arduino-1.0.7.zip`: Biblioteca do modelo de IA (importar via Arduino IDE)
 
-1. Instale as Bibliotecas Necessárias:
-   - Suporte à placa ESP32 no Arduino IDE
-   - SDK do Edge Impulse
-   - Biblioteca da Câmera ESP32
+## English
 
-2. Clone este repositório:
-```bash
-git clone https://github.com/yourusername/drowsiness-sensor.git
-```
+### ⚠️ Important Notice
+**DISCLAIMER**: This is an ongoing study project. It is not a commercial or certified product for use in critical situations. The use of this system is at your own risk. The developers are not responsible for any damage, accident, or problem resulting from the use of this system.
 
-3. Abra o projeto no Arduino IDE
+### Overview
+drowsinessSensor is a drowsiness detection system designed to enhance road safety by alerting drivers when signs of drowsiness are detected. Using an ESP32-CAM and an AI model trained on Edge Impulse, the system monitors visual cues such as nodding and yawning in real-time, issuing progressive alerts to prevent accidents.
 
-4. Instale o modelo Edge Impulse:
-   - Baixe seu modelo treinado do Edge Impulse
-   - Coloque os arquivos do modelo na pasta `src`
-   - Atualize o caminho do modelo no código se necessário
+### Features
+- **Real-time Detection**: Continuous monitoring of the driver's alertness
+- **Progressive Alerts**: Multi-level alert system with increasing intensity
+- **Automatic Adaptation**: Adjustment to different lighting conditions
+- **Low Power Consumption**: Optimized for resource-limited devices
+- **Easy Installation**: Simple setup on the vehicle dashboard
 
-5. Configure o hardware:
-   - Conecte o buzzer ao GPIO12
-   - Garanta alimentação adequada
-   - Posicione a câmera corretamente
+### Hardware Requirements
+- ESP32-CAM (AI-Thinker model recommended)
+- Buzzer (connected to GPIO12)
+- 5V power supply
+- USB cable for programming
+- Optional: External LED for better alert visibility
 
-6. Faça upload do código para seu ESP32-CAM
+### Documentation
+- [Installation Guide](INSTALLATION.md)
+- [Contribution Guide](CONTRIBUTING_EN.md)
 
-### Uso
-1. Ligue o dispositivo
-2. O sistema inicializará e começará o monitoramento
-3. Posicione-se em frente à câmera
-4. O sistema detectará automaticamente sinais de sonolência
-5. Alertas serão acionados progressivamente:
-   - Nível 1: LED piscando lentamente e tom baixo
-   - Nível 2: Piscada média e tom médio
-   - Nível 3: Piscada rápida e tom alto
-   - Nível 4: Alerta crítico com padrão SOS
-
-### Solução de Problemas
-- Garanta condições adequadas de iluminação
-- Se a câmera falhar ao inicializar, verifique a alimentação
-- Verifique o monitor serial para informações de debug
-- Verifique se todas as conexões estão seguras 
+### Important Files
+- `drowsinessSensor.ino`: Main project code
+- `ei-snorless-1-arduino-1.0.7.zip`: AI model library (import via Arduino IDE) 

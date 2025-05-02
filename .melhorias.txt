@@ -1,0 +1,158 @@
+4. Recomendações de melhoria
+4.1 Calibragem e suavização de threshold
+[RECOMENDADO] Suavizar adaptação
+
+Em vez de reassinar DETECTION_THRESHOLD = ORIGINAL_DETECTION_THRESHOLD * factor de uma vez, aplique um exponential moving average (EMA):
+
+const float α = 0.1f;  // suavização
+detectionThreshold = α * newThreshold + (1 - α) * detectionThreshold;
+
+Isso evita saltos bruscos e flapping 
+
+[RECOMENDADO] Limitar faixa de adaptação
+
+Constrain o threshold num intervalo restrito, ex. [0.5, 0.8], para não ficar nem muito sensível nem muito insensível.
+
+[RECOMENDADO] Supressão pós-alerta ("cool-down")
+Após um alerta crítico, ignore novas detecções por um período fixo (ex. 5 s) antes de rearmar contadores.
+
+4.2 Filtragem de caixas e reforço de severidade
+[RECOMENDADO] Descartar caixas pequenas:
+
+
+if ((box.width * box.height) < MIN_BOX_AREA) continue;
+
+Multi-classe avançada
+utilize heurística: se consecutiveDrowsyCount ≥ 6 então trate como crítico.
+
+
+4.3 Pós-processamento temporal extra
+[RECOMENDADO] Janela deslizante com voting
+
+Em vez de contar apenas consecutivos, mantenha um buffer circular de N últimos frames e faça "voto":
+
+int votes = count_if(buffer.begin(), buffer.end(), [](Frame f){ return f.isDrowsy; });
+if (votes >= VOTE_THRESHOLD) alert();
+Isso reduz ruído de falsos picos 
+
+5. Recomendações adicionais
+
+[RECOMENDADO] Calibração inicial personalizada
+Implementar um período de calibração inicial (~30s) quando o sistema detecta uma face nova para ajustar thresholds ao motorista específico.
+
+[RECOMENDADO] Detecção de condições ambientais extremas
+Implementar alerta quando condições de iluminação estão fora do ideal para a detecção.
+
+[RECOMENDADO] Histórico de alertas com timestamp
+Armazenar últimos N alertas com timestamps para análise posterior.
+
+6. Plano de implementação
+
+6.1 Priorização das melhorias
+Prioridade Alta (Melhorar precisão do core):
+1. Suavização de threshold com EMA
+2. Limitação de faixa de adaptação 
+3. Descarte de caixas pequenas
+4. Multi-classe avançada para alertas críticos
+
+Prioridade Média (Reduzir falsos positivos):
+1. Janela deslizante com voting
+2. Supressão pós-alerta
+3. Calibração inicial personalizada
+
+Prioridade Baixa (Melhorias de usabilidade):
+1. Detecção de condições ambientais extremas
+2. Histórico de alertas com timestamp
+
+6.2 Etapas de implementação
+
+Fase 1: Implementação de melhorias prioritárias
+- Adicionar suavização EMA na função checkAndAdjustThresholds()
+- Implementar constrain para manter thresholds em intervalo seguro
+- Adicionar filtragem de caixas pequenas no processamento de detecção
+- Implementar lógica de multi-classe avançada para elevação automática de nível crítico
+
+Fase 2: Implementação de melhorias secundárias
+- Desenvolver buffer circular e sistema de voting para reduzir falsos positivos
+- Melhorar sistema de supressão pós-alerta com tempo adaptativo
+- Implementar rotina de calibração inicial ao detectar motorista novo
+
+Fase 3: Implementação de melhorias complementares
+- Adicionar detecção e alerta para condições ambientais extremas
+- Implementar sistema de logging para histórico de alertas
+
+6.3 Código para implementação prioritária (Fase 1)
+
+1. Suavização EMA na função checkAndAdjustThresholds():
+```cpp
+// Adicionar no escopo global
+const float EMA_ALPHA = 0.1f;  // Fator de suavização
+const float MIN_THRESHOLD_VALUE = 0.5f;
+const float MAX_THRESHOLD_VALUE = 0.8f;
+
+// Na função checkAndAdjustThresholds()
+float targetThreshold = ORIGINAL_DETECTION_THRESHOLD * reductionFactor;
+// Aplicar EMA
+DETECTION_THRESHOLD = EMA_ALPHA * targetThreshold + (1 - EMA_ALPHA) * DETECTION_THRESHOLD;
+// Aplicar constraints
+DETECTION_THRESHOLD = constrain(DETECTION_THRESHOLD, MIN_THRESHOLD_VALUE, MAX_THRESHOLD_VALUE);
+```
+
+2. Filtragem de caixas pequenas:
+```cpp
+// Adicionar no escopo global
+const float MIN_BOX_AREA_RATIO = 0.03f; // 3% da área total da imagem
+
+// No loop de processamento das bounding boxes
+for (uint32_t i = 0; i < result.bounding_boxes_count; i++) {
+    ei_impulse_result_bounding_box_t bb = result.bounding_boxes[i];
+    
+    // Calcular a área relativa da caixa
+    float boxAreaRatio = (bb.width * bb.height) / 
+                        (EI_CLASSIFIER_INPUT_WIDTH * EI_CLASSIFIER_INPUT_HEIGHT);
+                        
+    // Descartar caixas muito pequenas
+    if (boxAreaRatio < MIN_BOX_AREA_RATIO) continue;
+    
+    // Resto do código de processamento das caixas...
+}
+```
+
+3. Multi-classe avançada para alerta crítico:
+```cpp
+// Na lógica de alertas
+if (consecutiveDrowsyCount >= 6) {
+    // Forçar progressão para alerta crítico independente do tempo
+    currentAlertLevel = ALERT_CRITICAL;
+    alertLevelStartTime = millis();
+    Serial.println("Detecção persistente - Elevando para ALERTA CRÍTICO!");
+    activate_alerts(detectedState == STATE_NODDING ? "cabeceando" : "bocejando");
+}
+```
+
+4. Implementação de janela deslizante (Fase 2):
+```cpp
+// No escopo global 
+const int WINDOW_SIZE = 10;
+bool drowsyStateBuffer[WINDOW_SIZE]; 
+int bufferIndex = 0;
+const int VOTE_THRESHOLD = 6;
+
+// No processamento de estados
+// Atualizar buffer circular
+drowsyStateBuffer[bufferIndex] = (detectedState == STATE_NODDING || detectedState == STATE_YAWNING);
+bufferIndex = (bufferIndex + 1) % WINDOW_SIZE;
+
+// Contar votos
+int drowsyVotes = 0;
+for (int i = 0; i < WINDOW_SIZE; i++) {
+    if (drowsyStateBuffer[i]) drowsyVotes++;
+}
+
+// Usar contagem de votos como complemento ao contador de consecutivos
+if (drowsyVotes >= VOTE_THRESHOLD) {
+    // Considerar estado de sonolência mesmo sem consecutivos suficientes
+    // Implementar lógica de alerta aqui...
+}
+```
+

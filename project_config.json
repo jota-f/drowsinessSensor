@@ -1,63 +1,46 @@
 {
-    "name": "Drowsiness Sensor",
+    "name": "drowsinessSensor",
     "version": "1.1.0",
-    "description": "Driver drowsiness detection system using ESP32-CAM and Edge Impulse",
-    "author": {
-        "name": "Your Name",
-        "email": "your.email@example.com"
-    },
-    "hardware": {
-        "platform": "ESP32-CAM",
-        "model": "AI-Thinker",
-        "components": {
-            "camera": {
-                "type": "OV2640",
-                "resolution": "QVGA (320x240)",
-                "capture_format": "JPEG",
-                "processing_format": "RGB888"
-            },
-            "buzzer": {
-                "pin": 12,
-                "type": "Active"
-            },
-            "led": {
-                "flash": 4,
-                "builtin": 33
-            }
+    "description": "Sistema de Detecção de Sonolência para Motoristas",
+    "authors": [
+        {
+            "name": "drowsinessSensor Team"
         }
+    ],
+    "board": "esp32:esp32:esp32cam",
+    "framework": "arduino",
+    "config": {
+        "boardId": "esp32:esp32:esp32cam",
+        "baudRate": 115200
+    },
+    "platformio": {
+        "env": "esp32cam",
+        "platform": "espressif32",
+        "board": "esp32cam",
+        "framework": "arduino",
+        "monitor_speed": 115200,
+        "build_flags": [
+            "-DBOARD_HAS_PSRAM",
+            "-mfix-esp32-psram-cache-issue"
+        ],
+        "board_build.partitions": "huge_app.csv",
+        "lib_deps": []
     },
     "dependencies": {
-        "arduino": {
-            "esp32": "^2.0.0",
-            "esp32-camera": "^2.0.0"
-        },
-        "edge_impulse": {
-            "sdk": "^1.0.0",
-            "model": "drowsiness-detection-v1"
-        }
+        "esp32-camera": "^1.0.0"
     },
-    "build": {
-        "framework": "arduino",
-        "platform": "espressif32",
-        "board": "esp32cam"
+    "hardware": {
+        "microcontroller": "ESP32-CAM",
+        "model": "AI-Thinker"
     },
-    "model": {
-        "input": {
-            "width": 96,
-            "height": 96,
-            "channels": 3,
-            "capture_format": "JPEG",
-            "processing_format": "RGB888",
-            "bits_per_channel": 8
-        },
-        "classes": [
-            "awake",
-            "nodding",
-            "yawning"
-        ],
-        "thresholds": {
-            "detection": 0.65,
-            "awake": 0.60
-        }
+    "documentation": {
+        "readme": "README.md",
+        "license": "LICENSE"
+    },
+    "settings": {
+        "detection_threshold": 0.65,
+        "awake_threshold": 0.60,
+        "consecutive_threshold": 3,
+        "consecutive_awake_threshold": 2
     }
 } 
