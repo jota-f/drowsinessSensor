@@ -129,4 +129,52 @@ Este guia detalha como configurar e instalar o sistema drowsinessSensor de detec
 
 - Limpe a lente da câmera periodicamente com um pano macio
 - Verifique as conexões regularmente
-- Mantenha o sistema livre de poeira e umidade 
+- Mantenha o sistema livre de poeira e umidade
+
+## Configuração do WiFi
+
+### Configuração Inicial
+1. Após a instalação do firmware, o ESP32-CAM criará uma rede WiFi:
+   - Nome da rede: `SnorLess-Config`
+   - Senha padrão: `snorless123`
+
+2. Conecte-se a esta rede com seu smartphone ou computador
+3. Abra o navegador e acesse `http://192.168.4.1`
+4. Na interface web, você poderá:
+   - Configurar a conexão com sua rede WiFi local
+   - Visualizar o feed da câmera em tempo real
+   - Ajustar o posicionamento da câmera
+   - Configurar parâmetros de detecção
+
+### Uso da Interface Web
+1. Após conectar à sua rede WiFi local:
+   - Acesse o endereço IP mostrado no monitor serial
+   - Ou encontre o IP na lista de dispositivos do seu roteador
+
+2. Recursos disponíveis:
+   - Visualização em tempo real
+   - Ajuste de brilho e contraste
+   - Configuração de sensibilidade
+   - Status do sistema
+   - Logs de detecção
+
+3. Recomendações:
+   - Use um navegador moderno (Chrome, Firefox, Edge)
+   - Mantenha o dispositivo na mesma rede local
+   - Evite redes públicas para maior segurança
+
+### Solução de Problemas WiFi
+- **Não encontra a rede SnorLess-Config:**
+  - Reinicie o dispositivo
+  - Verifique se está no alcance
+  - Aguarde 30 segundos após a inicialização
+
+- **Não conecta à interface web:**
+  - Verifique se está conectado à rede correta
+  - Tente acessar pelo IP alternativo: `192.168.4.1`
+  - Limpe o cache do navegador
+
+- **Perda de conexão frequente:**
+  - Aproxime-se do roteador
+  - Verifique a qualidade do sinal
+  - Considere um repetidor WiFi 

@@ -16,6 +16,9 @@ drowsinessSensor é um sistema de detecção de sonolência projetado para aumen
 - **Adaptação Automática**: Ajuste a diferentes condições de iluminação
 - **Baixo Consumo**: Otimizado para dispositivos com recursos limitados
 - **Fácil Instalação**: Configuração simples no painel do veículo
+- **Interface WiFi**: Servidor web para ajuste e alinhamento da câmera
+- **Configuração Remota**: Ajuste dos parâmetros via navegador web
+- **Streaming em Tempo Real**: Visualização do feed da câmera para posicionamento
 
 ### Requisitos de Hardware
 - ESP32-CAM (modelo AI-Thinker recomendado)
@@ -23,10 +26,12 @@ drowsinessSensor é um sistema de detecção de sonolência projetado para aumen
 - Fonte de alimentação de 5V
 - Cabo USB para programação
 - Opcional: LED externo para melhor visibilidade dos alertas
+- Rede WiFi 2.4GHz para configuração inicial
 
 ### Documentação
 - [Guia de Instalação](INSTALACAO.md)
 - [Guia de Contribuição](CONTRIBUTING.md)
+- [Registro de Mudanças](CHANGELOG.md)
 
 ### Arquivos Importantes
 - `drowsinessSensor.ino`: Código principal do projeto
@@ -46,6 +51,9 @@ drowsinessSensor is a drowsiness detection system designed to enhance road safet
 - **Automatic Adaptation**: Adjustment to different lighting conditions
 - **Low Power Consumption**: Optimized for resource-limited devices
 - **Easy Installation**: Simple setup on the vehicle dashboard
+- **Interface WiFi**: Web server for camera adjustment and alignment
+- **Remote Configuration**: Adjustment of parameters via web browser
+- **Real-time Streaming**: Visualization of camera feed for positioning
 
 ### Hardware Requirements
 - ESP32-CAM (AI-Thinker model recommended)
@@ -53,10 +61,12 @@ drowsinessSensor is a drowsiness detection system designed to enhance road safet
 - 5V power supply
 - USB cable for programming
 - Optional: External LED for better alert visibility
+- 2.4GHz WiFi network for initial configuration
 
 ### Documentation
 - [Installation Guide](INSTALLATION.md)
 - [Contribution Guide](CONTRIBUTING_EN.md)
+- [Change Log](CHANGELOG.md)
 
 ### Important Files
 - `drowsinessSensor.ino`: Main project code
